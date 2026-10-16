@@ -20,13 +20,49 @@ import { SustainabilityScreen } from './screens/SustainabilityScreen';
 import { ContactScreen } from './screens/ContactScreen';
 
 const TAB_PATHS: Record<TabType, string> = {
-  about: '/',
-  home: '/home',
+  about: '/about',
+  home: '/',
   products: '/products',
   industries: '/industries',
   technology: '/technology',
   sustainability: '/sustainability',
   contact: '/contact',
+};
+
+const DEFAULT_SEO = {
+  title: 'AXIWATT | Premium Solar Energy Solutions',
+  description: "Discover AXIWATT's premium solar energy solutions, battery storage systems, solar architecture and EV charging technologies for sustainable living.",
+};
+
+const PAGE_SEO: Partial<Record<TabType, { title: string; description: string }>> = {
+  about: {
+    title: 'About AXIWATT | Renewable Energy Solutions',
+    description: "Learn about AXIWATT's innovative approach to solar energy, sustainable architecture, battery storage and intelligent energy management.",
+  },
+  home: {
+    title: 'AXIWATT | Premium Solar Energy Solutions',
+    description: "Discover AXIWATT's premium solar energy solutions, battery storage systems, solar architecture and EV charging technologies for sustainable living.",
+  },
+  products: {
+    title: 'Battery & Energy Storage Products | AXIWATT',
+    description: 'Explore battery and energy storage systems engineered for electric mobility, critical infrastructure and reliable power.',
+  },
+  industries: {
+    title: 'Battery Solutions for Industries | AXIWATT',
+    description: 'See how AXIWATT battery and energy storage solutions support EV mobility, telecom network continuity and multi-megawatt power needs.',
+  },
+  technology: {
+    title: 'Battery Manufacturing Technology | AXIWATT',
+    description: 'Discover the automated assembly, safety protocols and solid-state battery research behind AXIWATT energy storage products.',
+  },
+  sustainability: {
+    title: 'Sustainable Energy Solutions & Solar Technology | AXIWATT',
+    description: 'Explore sustainable energy technologies that combine solar power, intelligent storage and energy-efficient building design.',
+  },
+  contact: {
+    title: 'Contact AXIWATT | Solar Consultation & Support',
+    description: 'Contact AXIWATT to discuss solar installations, battery energy storage, solar architecture and customized renewable energy solutions.',
+  },
 };
 
 const getTabFromPath = (pathname: string): TabType => {
@@ -44,6 +80,12 @@ export default function App() {
     }
     setCurrentTab(tab);
   };
+
+  useEffect(() => {
+    const seo = PAGE_SEO[currentTab] ?? DEFAULT_SEO;
+    document.title = seo.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', seo.description);
+  }, [currentTab]);
 
   useEffect(() => {
     const handlePopState = () => setCurrentTab(getTabFromPath(window.location.pathname));
