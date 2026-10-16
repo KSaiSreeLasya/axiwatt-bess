@@ -43,6 +43,18 @@ const PAGE_SEO: Partial<Record<TabType, { title: string; description: string }>>
     title: 'AXIWATT | Premium Solar Energy Solutions',
     description: "Discover AXIWATT's premium solar energy solutions, battery storage systems, solar architecture and EV charging technologies for sustainable living.",
   },
+  products: {
+    title: 'Battery & Energy Storage Products | AXIWATT',
+    description: 'Explore battery and energy storage systems engineered for electric mobility, critical infrastructure and reliable power.',
+  },
+  industries: {
+    title: 'Battery Solutions for Industries | AXIWATT',
+    description: 'See how AXIWATT battery and energy storage solutions support EV mobility, telecom network continuity and multi-megawatt power needs.',
+  },
+  technology: {
+    title: 'Battery Manufacturing Technology | AXIWATT',
+    description: 'Discover the automated assembly, safety protocols and solid-state battery research behind AXIWATT energy storage products.',
+  },
   sustainability: {
     title: 'Sustainable Energy Solutions & Solar Technology | AXIWATT',
     description: 'Explore sustainable energy technologies that combine solar power, intelligent storage and energy-efficient building design.',
