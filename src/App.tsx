@@ -29,6 +29,30 @@ const TAB_PATHS: Record<TabType, string> = {
   contact: '/contact',
 };
 
+const DEFAULT_SEO = {
+  title: 'AXIWATT | Premium Solar Energy Solutions',
+  description: "Discover AXIWATT's premium solar energy solutions, battery storage systems, solar architecture and EV charging technologies for sustainable living.",
+};
+
+const PAGE_SEO: Partial<Record<TabType, { title: string; description: string }>> = {
+  about: {
+    title: 'About AXIWATT | Renewable Energy Solutions',
+    description: "Learn about AXIWATT's innovative approach to solar energy, sustainable architecture, battery storage and intelligent energy management.",
+  },
+  home: {
+    title: 'AXIWATT | Premium Solar Energy Solutions',
+    description: "Discover AXIWATT's premium solar energy solutions, battery storage systems, solar architecture and EV charging technologies for sustainable living.",
+  },
+  sustainability: {
+    title: 'Sustainable Energy Solutions & Solar Technology | AXIWATT',
+    description: 'Explore sustainable energy technologies that combine solar power, intelligent storage and energy-efficient building design.',
+  },
+  contact: {
+    title: 'Contact AXIWATT | Solar Consultation & Support',
+    description: 'Contact AXIWATT to discuss solar installations, battery energy storage, solar architecture and customized renewable energy solutions.',
+  },
+};
+
 const getTabFromPath = (pathname: string): TabType => {
   const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   return (Object.keys(TAB_PATHS) as TabType[]).find((tab) => TAB_PATHS[tab] === normalized) ?? 'home';
@@ -44,6 +68,12 @@ export default function App() {
     }
     setCurrentTab(tab);
   };
+
+  useEffect(() => {
+    const seo = PAGE_SEO[currentTab] ?? DEFAULT_SEO;
+    document.title = seo.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', seo.description);
+  }, [currentTab]);
 
   useEffect(() => {
     const handlePopState = () => setCurrentTab(getTabFromPath(window.location.pathname));
