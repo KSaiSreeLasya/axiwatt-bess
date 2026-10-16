@@ -20,8 +20,8 @@ import { SustainabilityScreen } from './screens/SustainabilityScreen';
 import { ContactScreen } from './screens/ContactScreen';
 
 const TAB_PATHS: Record<TabType, string> = {
-  about: '/',
-  home: '/home',
+  about: '/about',
+  home: '/',
   products: '/products',
   industries: '/industries',
   technology: '/technology',
