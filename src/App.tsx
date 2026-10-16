@@ -19,8 +19,37 @@ import { TechnologyScreen } from './screens/TechnologyScreen';
 import { SustainabilityScreen } from './screens/SustainabilityScreen';
 import { ContactScreen } from './screens/ContactScreen';
 
+const TAB_PATHS: Record<TabType, string> = {
+  about: '/',
+  home: '/home',
+  products: '/products',
+  industries: '/industries',
+  technology: '/technology',
+  sustainability: '/sustainability',
+  contact: '/contact',
+};
+
+const getTabFromPath = (pathname: string): TabType => {
+  const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  return (Object.keys(TAB_PATHS) as TabType[]).find((tab) => TAB_PATHS[tab] === normalized) ?? 'home';
+};
+
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<TabType>('home');
+  const [currentTab, setCurrentTab] = useState<TabType>(() => getTabFromPath(window.location.pathname));
+
+  const navigate = (tab: TabType) => {
+    const path = TAB_PATHS[tab];
+    if (window.location.pathname !== path) {
+      window.history.pushState(null, '', path);
+    }
+    setCurrentTab(tab);
+  };
+
+  useEffect(() => {
+    const handlePopState = () => setCurrentTab(getTabFromPath(window.location.pathname));
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -43,7 +72,7 @@ export default function App() {
       {/* Top Navbar with the 7 recommended navigation menu items */}
       <Navbar
         currentTab={currentTab}
-        onSelectTab={setCurrentTab}
+        onSelectTab={navigate}
         onRequestQuote={() => setIsQuoteOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
       />
@@ -52,7 +81,7 @@ export default function App() {
       <main className="flex-grow">
         {currentTab === 'home' && (
           <HomeScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
             onOpenCompare={() => setIsCompareOpen(true)}
           />
@@ -60,14 +89,14 @@ export default function App() {
 
         {currentTab === 'about' && (
           <AboutScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
           />
         )}
 
         {currentTab === 'products' && (
           <ProductsScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
             onOpenCompare={() => setIsCompareOpen(true)}
             onOpenDatasheet={(product) => setDatasheetProduct(product)}
@@ -76,33 +105,33 @@ export default function App() {
 
         {currentTab === 'industries' && (
           <IndustriesScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
           />
         )}
 
         {currentTab === 'technology' && (
           <TechnologyScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
           />
         )}
 
         {currentTab === 'sustainability' && (
           <SustainabilityScreen
-            onSelectTab={setCurrentTab}
+            onSelectTab={navigate}
             onRequestQuote={() => setIsQuoteOpen(true)}
           />
         )}
 
         {currentTab === 'contact' && (
-          <ContactScreen onSelectTab={setCurrentTab} />
+          <ContactScreen onSelectTab={navigate} />
         )}
       </main>
 
       {/* Shared Footer with links to all sections */}
       <Footer
-        onSelectTab={setCurrentTab}
+        onSelectTab={navigate}
         onRequestQuote={() => setIsQuoteOpen(true)}
       />
 
@@ -131,7 +160,7 @@ export default function App() {
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        onSelectTab={setCurrentTab}
+        onSelectTab={navigate}
       />
     </div>
   );
